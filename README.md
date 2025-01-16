@@ -14,8 +14,8 @@ Run `install.sh`:
 
 ```
 kubectl decode <options> -s <secret-name>
-    n) Namespace.
-    o) Output format ("json", "yaml"). Defaults to "yaml".
+    n) Namespace. Defaults to 'default'.
+    o) Output format ('json', 'yaml'). Defaults to 'yaml'.
     h) Display help.
     s) Secret name to decode.
 ```

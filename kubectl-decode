@@ -26,7 +26,7 @@ FORMAT="yaml"
 # Parse arguments
 while getopts "n:o:hs:" arg; do
   case $arg in
-    n) # Namespace.
+    n) # Namespace
         NAMESPACE=${OPTARG}
       ;;
     o) # Output format ("json", "yaml"). Defaults to "yaml".
