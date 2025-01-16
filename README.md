@@ -4,6 +4,13 @@ This plugin decodes and shows secret's value in user-friendly format.
 
 # Install
 
+Clone this repository:
+
+```sh
+git clone https://github.com/minebul/kubectl-decode.git
+cd kubectl-decode
+```
+
 Run `install.sh`:
 
 ```sh

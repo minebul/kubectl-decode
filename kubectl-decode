@@ -36,7 +36,7 @@ while getopts "n:o:hs:" arg; do
             json|yaml)
               ;;
             *)
-                echo -e "ERROR: \"${FORMAT}\" is wrong output format. Supported are: \"json\", \"yaml\"\n"
+                echo -e "ERROR: \"${FORMAT}\" is wrong output format. Supported formats are: \"json\", \"yaml\"\n"
                 help
               ;;
           esac
