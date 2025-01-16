@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Check yq dependency
+if ! command -v yq &> /dev/null
+then 
+  echo -e "ERROR: \"yq\" command cannon be found\n"
+  echo "To continue, install \"yq\": https://github.com/mikefarah/yq?tab=readme-ov-file#install"
+  exit 1
+fi
+
+# Help function
+help() {
+  echo -e "This plugin decodes and shows secret(s) value in user-friendly format.\n\nUsage: kubectl decode <options> -s <secret-name>"
+  # Show options below
+  grep " .)\ #" $0
+  exit 0
+}
+
+# Check for missing secret name and print Help
+[ $# -eq 0 ] && echo -e "\nERROR: Missing secret name [-s]\n" && help
+
+# Define defaults
+NAMESPACE="default"
+FORMAT="yaml"
+
+# Parse arguments
+while getopts "n:o:hs:" arg; do
+  case $arg in
+    n) # Namespace
+        NAMESPACE=${OPTARG}
+      ;;
+    o) # Output format ("json", "yaml"). Defaults to "yaml".
+        FORMAT=${OPTARG}
+
+          case $FORMAT in
+            json|yaml)
+              ;;
+            *)
+                echo -e "ERROR: \"${FORMAT}\" is wrong output format. Supported formats are: \"json\", \"yaml\"\n"
+                help
+              ;;
+          esac
+      ;;
+    h) # Display help.
+        help
+        exit 0
+      ;;
+    s) # Secret name to decode.
+        SECRET=${OPTARG}
+      ;;
+    *)
+      ;;
+  esac
+done
+
+if [[ "$SECRET" ]]; then
+  RESPONSE=$(kubectl --namespace $NAMESPACE get secret $SECRET -ojson | jq '.data | map_values(@base64d)')
+
+  # Process format
+    case $FORMAT in
+      json)
+          echo "${RESPONSE}"
+        ;;
+      yaml)
+          echo "${RESPONSE}" | yq -P
+        ;;
+    esac
+fi
